@@ -1,65 +1,71 @@
-import Image from "next/image";
+import Hero from '@/components/Hero';
+import Services from '@/components/Services';
+import OfferShowcase from '@/components/OfferShowcase';
+import HandbookShowcase from '@/components/HandbookShowcase';
+import GuidesShowcase from '@/components/GuidesShowcase';
+import VideoGallery from '@/components/VideoGallery';
+import Contact from '@/components/Contact';
+import Partners from '@/components/Partners';
+import { OrganizationJsonLd, WebSiteJsonLd, FAQJsonLd } from '@/components/JsonLd';
+import SpringBanner from '@/components/SpringBanner';
+import FestiveParticles from '@/components/animations/FestiveParticles';
+import FounderLetter from '@/components/FounderLetter';
+import About from '@/components/About';
+import BusinessScope from '@/components/BusinessScope';
+import SocialMap from '@/components/SocialMap';
+
+const faqs = [
+  {
+    question: '马来西亚留学需要雅思成绩吗？',
+    answer: '大部分马来西亚公立大学要求雅思5.0-6.0分，但部分大学和专业接受MUET成绩替代雅思。如暂时没有语言成绩，部分学校也提供有条件录取（先读语言班再入学）。阿拉仃教育可协助您规划最佳语言方案。',
+  },
+  {
+    question: '马来西亚留学一年费用大概多少？',
+    answer: '马来西亚公立大学学费每年约1-3万人民币，私立大学每年约3-6万人民币。生活费每月约2000-4000人民币（含住宿、餐饮、交通）。整体花费约为欧美国家的1/3至1/4，性价比极高。',
+  },
+  {
+    question: '马来西亚大学的学历中国认可吗？',
+    answer: '是的。马来西亚绝大多数公立和私立大学的学历均获得中国教育部认证，毕业后可在中国留学服务中心办理学历认证，享受海归待遇，包括落户、报考公务员等优惠政策。',
+  },
+  {
+    question: '申请马来西亚大学需要多长时间？',
+    answer: '从准备材料到收到录取通知书，通常需要1-3个月。签证办理（EMGS）一般需要2-4个月。建议至少提前半年开始规划。阿拉仃教育全程协助，可大幅缩短等待时间。',
+  },
+  {
+    question: '阿拉仃教育提供哪些服务？',
+    answer: '我们提供全方位一站式留学服务，包括：升学规划与选校咨询、申请材料准备与递交、语言培训（雅思/MUET/PTE）、EMGS签证办理、境外接机与住宿安排、入学注册与学业支持等。从申请到毕业，全程陪伴。',
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <OrganizationJsonLd />
+      <WebSiteJsonLd />
+      <FAQJsonLd faqs={faqs} />
+      <SpringBanner />
+      <FestiveParticles />
+      <Hero />
+
+      {/* 3D Social Map Section */}
+      <section className="w-full h-[600px] md:h-[700px] bg-slate-900 relative">
+        <div className="absolute top-8 left-0 right-0 z-10 text-center pointer-events-none">
+          <h2 className="text-3xl md:text-4xl font-bold text-white drop-shadow-md">阿拉仃全球社交地图</h2>
+          <p className="text-slate-300 mt-2 text-sm md:text-base drop-shadow">查看各地的留学生分布，发现你的校友圈</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+        <SocialMap className="w-full h-full border-none" />
+      </section>
+
+      <FounderLetter />
+      <Services />
+      <BusinessScope />
+      <HandbookShowcase />
+      <OfferShowcase />
+      <GuidesShowcase />
+      <VideoGallery />
+      <About />
+      <Partners />
+      <Contact />
+    </>
   );
 }

@@ -1,0 +1,23 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Lead {
+  id        Int      @id @default(autoincrement())
+  type      String   // 'assessment' | 'contact'
+  name      String
+  contact   String   // Phone or WeChat or Email
+  data      String   // JSON string containing all form fields
+  status    String   @default("new") // new, contacted, closed
+  note      String?  // Admin internal notes
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

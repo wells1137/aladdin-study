@@ -1,26 +1,415 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-sans: var(--font-inter);
+
+  /* 🏮 Spring Festival Red (中国红) */
+  --color-primary: #C41E3A;
+  --color-primary-foreground: #FFFFFF;
+
+  /* 🏮 Fortune Gold (金色) */
+  --color-secondary: #FFD700;
+  --color-secondary-foreground: #000000;
+
+  /* Neutral / Surface */
+  --color-muted: #FFF8F0;
+  --color-muted-foreground: #1F2937;
+
+  /* Dark Surface - deep red */
+  --color-accent: #1A0A0A;
+  --color-accent-foreground: #FFFFFF;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  body {
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(to bottom,
+        transparent,
+        rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+    @apply antialiased;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold tracking-tight;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+
+  /* Custom Utilities for Youthful Vibe */
+  .text-outline {
+    -webkit-text-stroke: 1px currentColor;
+    color: transparent;
+  }
+
+  .text-outline-white {
+    -webkit-text-stroke: 1px white;
+    color: transparent;
+  }
+
+  .text-shadow-neon {
+    text-shadow: 0 0 10px rgba(204, 255, 0, 0.5);
+  }
+
+  .brutalist-shadow {
+    box-shadow: 8px 8px 0px 0px #000000;
+  }
+
+  .brutalist-shadow-sm {
+    box-shadow: 4px 4px 0px 0px #000000;
+  }
+
+  .brutalist-border {
+    border: 3px solid #000000;
+  }
+
+  /* ============================
+     TECH-FEEL ANIMATIONS
+     ============================ */
+
+  /* Marquee */
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-marquee {
+    animation: marquee 20s linear infinite;
+  }
+
+  /* Float Animation */
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0px) rotate(3deg);
+    }
+
+    50% {
+      transform: translateY(-12px) rotate(3deg);
+    }
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @keyframes float-slow {
+
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  .animate-float-slow {
+    animation: float-slow 6s ease-in-out infinite;
+  }
+
+  /* Pulse Glow */
+  @keyframes pulse-glow {
+
+    0%,
+    100% {
+      box-shadow: 0 0 5px rgba(196, 30, 58, 0.3), 0 0 15px rgba(196, 30, 58, 0.1);
+    }
+
+    50% {
+      box-shadow: 0 0 15px rgba(196, 30, 58, 0.6), 0 0 40px rgba(196, 30, 58, 0.2);
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow-lime {
+
+    0%,
+    100% {
+      box-shadow: 0 0 5px rgba(255, 215, 0, 0.3), 0 0 15px rgba(255, 215, 0, 0.1);
+    }
+
+    50% {
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 50px rgba(255, 215, 0, 0.2);
+    }
+  }
+
+  .animate-pulse-glow-lime {
+    animation: pulse-glow-lime 3s ease-in-out infinite;
+  }
+
+  /* Gradient Shift (flowing gradient) */
+  @keyframes gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .animate-gradient-text {
+    background-size: 200% auto;
+    animation: gradient-shift 4s ease infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-gradient-animated {
+    background-size: 200% 200%;
+    animation: gradient-shift 6s ease infinite;
+  }
+
+  /* Scanline Effect */
+  @keyframes scanline {
+    0% {
+      transform: translateY(-100%);
+    }
+
+    100% {
+      transform: translateY(100%);
+    }
+  }
+
+  .scanline::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(to bottom,
+        transparent,
+        rgba(196, 30, 58, 0.05),
+        transparent);
+    animation: scanline 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  /* Grid Move (tech grid background) */
+  @keyframes grid-move {
+    0% {
+      transform: translate(0, 0);
+    }
+
+    100% {
+      transform: translate(40px, 40px);
+    }
+  }
+
+  .tech-grid {
+    background-image:
+      linear-gradient(rgba(196, 30, 58, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(196, 30, 58, 0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: grid-move 8s linear infinite;
+  }
+
+  /* Glow Border */
+  .glow-border {
+    position: relative;
+  }
+
+  .glow-border::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, #C41E3A, #FFD700, #C41E3A);
+    background-size: 200% 200%;
+    animation: gradient-shift 4s ease infinite;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .glow-border:hover::before {
+    opacity: 1;
+  }
+
+  /* Shimmer / shine sweep */
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .shimmer-on-hover:hover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.15),
+        transparent);
+    animation: shimmer 0.8s ease-in-out;
+    pointer-events: none;
+  }
+
+  /* Magnetic hover tilt */
+  .hover-lift {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-6px);
+  }
+
+  /* Form input glow */
+  .input-glow:focus {
+    box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.15), 0 0 15px rgba(196, 30, 58, 0.1);
+    border-color: #C41E3A;
+    outline: none;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  /* Gradient Updates */
+  .bg-gradient-electric {
+    background-image: linear-gradient(135deg, #C41E3A 0%, #FFD700 100%);
+  }
+
+  /* Stagger animation delay vars */
+  .stagger-1 {
+    animation-delay: 0.1s;
+  }
+
+  .stagger-2 {
+    animation-delay: 0.2s;
+  }
+
+  .stagger-3 {
+    animation-delay: 0.3s;
+  }
+
+  .stagger-4 {
+    animation-delay: 0.4s;
+  }
+
+  .stagger-5 {
+    animation-delay: 0.5s;
+  }
+
+  /* Icon spin on hover */
+  .icon-hover-spin {
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .group:hover .icon-hover-spin {
+    transform: rotate(360deg) scale(1.1);
+  }
+
+  /* ============================
+     SPRING FESTIVAL (春节) THEME
+     ============================ */
+
+  /* Falling particles */
+  @keyframes festive-fall {
+    0% {
+      transform: translateY(-60px) translateX(0) rotate(0deg);
+      opacity: 0;
+    }
+
+    10% {
+      opacity: 1;
+    }
+
+    90% {
+      opacity: 0.8;
+    }
+
+    100% {
+      transform: translateY(100vh) translateX(var(--sway, 40px)) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  .animate-festive-fall {
+    animation: festive-fall linear infinite;
+  }
+
+  /* Lantern swing */
+  @keyframes lantern-swing {
+
+    0%,
+    100% {
+      transform: rotate(-8deg);
+    }
+
+    50% {
+      transform: rotate(8deg);
+    }
+  }
+
+  .animate-lantern-swing {
+    animation: lantern-swing 2.5s ease-in-out infinite;
+  }
+
+  /* Spring banner gradient */
+  .spring-banner-gradient {
+    background: linear-gradient(135deg, #B22222, #DC143C, #FF4500, #DC143C, #B22222);
+    background-size: 300% 100%;
+    animation: gradient-shift 6s ease infinite;
+  }
+
+  /* Golden text glow */
+  .spring-text-glow {
+    text-shadow:
+      0 0 8px rgba(255, 215, 0, 0.6),
+      0 0 20px rgba(255, 215, 0, 0.3),
+      0 0 40px rgba(255, 165, 0, 0.15);
+    color: #FFD700;
+  }
+
+  /* Sparkle line */
+  @keyframes sparkle-move {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    100% {
+      background-position: 200% 50%;
+    }
+  }
+
+  .spring-sparkle-line {
+    background: linear-gradient(90deg,
+        transparent,
+        #FFD700,
+        #FF6347,
+        #FFD700,
+        transparent);
+    background-size: 200% 100%;
+    animation: sparkle-move 2s linear infinite;
+  }
+
+  /* Spring Festival Hero accent */
+  .spring-hero-glow {
+    box-shadow:
+      0 0 30px rgba(220, 20, 60, 0.2),
+      0 0 60px rgba(255, 215, 0, 0.1);
+  }
 }
