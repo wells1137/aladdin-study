@@ -487,6 +487,18 @@ export default function SocialMap({ className }: { className?: string }) {
                 </div>
             )}
 
+            {/* Reopen Info Panel Button (Visible only when panel is closed) */}
+            {!isInfoPanelOpen && !isPinningMode && (
+                <button
+                    onClick={() => setIsInfoPanelOpen(true)}
+                    className="absolute top-6 left-4 z-10 bg-slate-900/90 backdrop-blur-md border border-white/10 text-white px-4 py-3 rounded-xl shadow-xl hover:bg-slate-800 transition-all flex items-center gap-2 animate-fade-in-up"
+                    aria-label="打开校友圈面板"
+                >
+                    <Users className="w-5 h-5 text-brand-primary" />
+                    <span className="font-bold text-sm">打开校友圈</span>
+                </button>
+            )}
+
             {/* Auth Modal */}
             <StudentAuthModal
                 isOpen={isAuthModalOpen}
