@@ -11,6 +11,7 @@ export async function GET() {
                     select: {
                         name: true,
                         avatarUrl: true,
+                        university: true,
                     },
                 },
             },
@@ -77,7 +78,8 @@ export async function POST(req: NextRequest) {
                 author: {
                     select: {
                         name: true,
-                        avatarUrl: true
+                        avatarUrl: true,
+                        university: true
                     }
                 }
             }

@@ -9,12 +9,14 @@ import { mockMapData, MapItem, MapItemType } from '@/lib/mockMapData';
 import { useAuth } from './AuthContext';
 import StudentAuthModal from './StudentAuthModal';
 import StudentPinModal from './StudentPinModal';
+import EditProfileModal from './EditProfileModal';
 import Image from 'next/image';
 
 export default function SocialMap({ className }: { className?: string }) {
     const { isStudent, user, logout } = useAuth();
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
     const [livePosts, setLivePosts] = useState<MapItem[]>([]);
 
     const [selectedItem, setSelectedItem] = useState<MapItem | null>(null);
@@ -67,7 +69,7 @@ export default function SocialMap({ className }: { className?: string }) {
                     type: post.type as MapItemType,
                     coordinates: [post.longitude, post.latitude] as [number, number],
                     name: post.author?.name || 'Aladdin Scholar',
-                    university: '',
+                    university: post.author?.university || '',
                     status: 'online',
                     avatar: post.author?.avatarUrl || '',
                     title: post.title,
@@ -424,16 +426,25 @@ export default function SocialMap({ className }: { className?: string }) {
                             在这里发现马来西亚的留学生们。分享你的位置，寻找志同道合的学习伙伴吧！🎉
                         </p>
                         {isStudent && user && (
-                            <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl mb-6 shadow-inner">
-                                {user.avatarUrl ? (
-                                    <Image src={user.avatarUrl} alt={user.name} width={40} height={40} className="rounded-full border border-white/20" />
-                                ) : (
-                                    <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center border border-white/20"><Users className="w-5 h-5 text-slate-400" /></div>
-                                )}
-                                <div>
-                                    <p className="text-sm font-bold text-white leading-tight">{user.name}</p>
-                                    <p className="text-xs text-slate-400">{user.university || 'Aladdin Scholar'}</p>
+                            <div className="flex items-center justify-between gap-3 p-3 bg-white/5 border border-white/10 rounded-xl mb-6 shadow-inner group">
+                                <div className="flex items-center gap-3">
+                                    {user.avatarUrl ? (
+                                        <Image src={user.avatarUrl} alt={user.name} width={40} height={40} className="rounded-full border border-white/20" />
+                                    ) : (
+                                        <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center border border-white/20"><Users className="w-5 h-5 text-slate-400" /></div>
+                                    )}
+                                    <div>
+                                        <p className="text-sm font-bold text-white leading-tight">{user.name}</p>
+                                        <p className="text-xs text-slate-400">{user.university || 'Aladdin Scholar'}</p>
+                                    </div>
                                 </div>
+                                <button
+                                    onClick={() => setIsEditProfileModalOpen(true)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-brand-primary text-slate-400 hover:text-white transition-colors"
+                                    title="编辑资料"
+                                >
+                                    <span className="text-xs">✏️</span>
+                                </button>
                             </div>
                         )}
 
@@ -493,6 +504,11 @@ export default function SocialMap({ className }: { className?: string }) {
                     setDraftLocation(null);
                     fetchPosts();
                 }}
+            />
+            {/* Edit Profile Modal */}
+            <EditProfileModal
+                isOpen={isEditProfileModalOpen}
+                onClose={() => setIsEditProfileModalOpen(false)}
             />
         </div>
     );

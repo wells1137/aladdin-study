@@ -19,6 +19,7 @@ interface AuthState {
     login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
     register: (email: string, password: string, name: string, university?: string) => Promise<{ success: boolean; error?: string }>;
     logout: () => void;
+    updateProfile: (userData: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthState>({
@@ -119,8 +120,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null);
     };
 
+    const updateProfile = (userData: Partial<User>) => {
+        if (user) {
+            setUser({ ...user, ...userData });
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ isPartner, isStudent, user, loading, login, register, logout }}>
+        <AuthContext.Provider value={{ isPartner, isStudent, user, loading, login, register, logout, updateProfile }}>
             {children}
         </AuthContext.Provider>
     );
