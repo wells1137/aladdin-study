@@ -21,3 +21,32 @@ model Lead {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  university   String?
+  avatarUrl    String?
+  role         String    @default("student") // student, admin
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  posts        Post[]
+}
+
+model Post {
+  id          String   @id @default(uuid())
+  type        String   // 'food', 'study_spot', 'life'
+  title       String
+  subtitle    String?
+  description String?
+  imageUrl    String?
+  longitude   Float
+  latitude    Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}

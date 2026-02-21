@@ -9,7 +9,7 @@ const Navbar = () => {
 
     const navLinks = [
         { name: '留学指南', href: '/guides' },
-        { name: '签证进度', href: 'https://visa.educationmalaysia.gov.my/emgs/application/searchForm/' },
+        { name: '签证进度', href: '/tools/emgs' },
         { name: '3D 社交地图', href: '/community' },
         { name: '服务项目', href: '/#services' },
         { name: '多元业务', href: '/#business' },

@@ -34,8 +34,8 @@ export function validateCredentials(username: string, password: string): boolean
     return accounts.get(username) === password;
 }
 
-export async function signToken(username: string): Promise<string> {
-    return new SignJWT({ username, role: 'partner' })
+export async function signToken(username: string, role: string = 'partner'): Promise<string> {
+    return new SignJWT({ username, role })
         .setProtectedHeader({ alg: 'HS256' })
         .setExpirationTime('7d')
         .setIssuedAt()

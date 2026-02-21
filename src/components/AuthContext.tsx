@@ -2,19 +2,32 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
+export interface User {
+    id: string;
+    email?: string;
+    name: string;
+    avatarUrl?: string | null;
+    university?: string | null;
+    role: string;
+}
+
 interface AuthState {
     isPartner: boolean;
-    username: string | null;
+    isStudent: boolean;
+    user: User | null;
     loading: boolean;
     login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
+    register: (email: string, password: string, name: string, university?: string) => Promise<{ success: boolean; error?: string }>;
     logout: () => void;
 }
 
 const AuthContext = createContext<AuthState>({
     isPartner: false,
-    username: null,
+    isStudent: false,
+    user: null,
     loading: true,
     login: async () => ({ success: false }),
+    register: async () => ({ success: false }),
     logout: () => { },
 });
 
@@ -22,12 +35,13 @@ export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [isPartner, setIsPartner] = useState(false);
-    const [username, setUsername] = useState<string | null>(null);
+    const [isStudent, setIsStudent] = useState(false);
+    const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
     // Check token on mount
     useEffect(() => {
-        const token = localStorage.getItem('partner_token');
+        const token = localStorage.getItem('auth_token');
         if (token) {
             fetch('/api/auth', {
                 headers: { Authorization: `Bearer ${token}` },
@@ -35,31 +49,61 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 .then(res => res.json())
                 .then(data => {
                     if (data.authenticated) {
-                        setIsPartner(true);
-                        setUsername(data.username);
+                        if (data.role === 'partner') {
+                            setIsPartner(true);
+                            setUser({ id: 'partner', name: data.username, role: 'partner' });
+                        } else {
+                            setIsStudent(true);
+                            setUser(data.user);
+                        }
                     } else {
-                        localStorage.removeItem('partner_token');
+                        localStorage.removeItem('auth_token');
                     }
                 })
-                .catch(() => localStorage.removeItem('partner_token'))
+                .catch(() => localStorage.removeItem('auth_token'))
                 .finally(() => setLoading(false));
         } else {
             setLoading(false);
         }
     }, []);
 
-    const login = async (user: string, pass: string) => {
+    const login = async (userValue: string, pass: string) => {
         try {
             const res = await fetch('/api/auth', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: user, password: pass }),
+                body: JSON.stringify({ username: userValue, password: pass }),
             });
             const data = await res.json();
             if (res.ok) {
-                localStorage.setItem('partner_token', data.token);
-                setIsPartner(true);
-                setUsername(data.username);
+                localStorage.setItem('auth_token', data.token);
+                if (data.user?.role === 'partner') {
+                    setIsPartner(true);
+                    setUser({ id: 'partner', name: data.username, role: 'partner' });
+                } else {
+                    setIsStudent(true);
+                    setUser(data.user);
+                }
+                return { success: true };
+            }
+            return { success: false, error: data.error };
+        } catch {
+            return { success: false, error: '网络错误，请重试' };
+        }
+    };
+
+    const register = async (email: string, password: string, name: string, university?: string) => {
+        try {
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password, name, university }),
+            });
+            const data = await res.json();
+            if (res.ok) {
+                localStorage.setItem('auth_token', data.token);
+                setIsStudent(true);
+                setUser(data.user);
                 return { success: true };
             }
             return { success: false, error: data.error };
@@ -69,13 +113,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     const logout = () => {
-        localStorage.removeItem('partner_token');
+        localStorage.removeItem('auth_token');
         setIsPartner(false);
-        setUsername(null);
+        setIsStudent(false);
+        setUser(null);
     };
 
     return (
-        <AuthContext.Provider value={{ isPartner, username, loading, login, logout }}>
+        <AuthContext.Provider value={{ isPartner, isStudent, user, loading, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );

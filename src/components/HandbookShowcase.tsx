@@ -53,7 +53,7 @@ const handbooks = [
 ];
 
 const HandbookShowcase = () => {
-    const { isPartner, username, logout } = useAuth();
+    const { isPartner, user, logout } = useAuth();
     const [showLogin, setShowLogin] = useState(false);
 
     const handleDownload = (book: typeof handbooks[0]) => {
@@ -94,7 +94,7 @@ const HandbookShowcase = () => {
                                 <div className="flex items-center gap-3">
                                     <div className="bg-secondary border-4 border-black px-6 py-3 flex items-center gap-2">
                                         <UserCheck className="w-5 h-5" />
-                                        <span className="font-black text-sm uppercase">{username}</span>
+                                        <span className="font-black text-sm uppercase">{user?.name}</span>
                                     </div>
                                     <button
                                         onClick={logout}
@@ -147,8 +147,8 @@ const HandbookShowcase = () => {
                                         <button
                                             onClick={() => handleDownload(book)}
                                             className={`block w-full text-center py-4 font-bold uppercase tracking-wider transition-colors border-2 border-transparent hover:border-black ${isLocked
-                                                    ? 'bg-gray-300 text-gray-600 hover:bg-gray-400 cursor-pointer'
-                                                    : 'bg-black text-white hover:bg-primary hover:text-white'
+                                                ? 'bg-gray-300 text-gray-600 hover:bg-gray-400 cursor-pointer'
+                                                : 'bg-black text-white hover:bg-primary hover:text-white'
                                                 }`}
                                         >
                                             <span className="flex items-center justify-center gap-2">
@@ -169,7 +169,7 @@ const HandbookShowcase = () => {
                     <div className="md:hidden mt-8 text-center">
                         {isPartner ? (
                             <div className="flex items-center justify-center gap-3">
-                                <span className="bg-secondary border-2 border-black px-4 py-2 font-black text-sm">{username}</span>
+                                <span className="bg-secondary border-2 border-black px-4 py-2 font-black text-sm">{user?.name}</span>
                                 <button onClick={logout} className="text-white font-bold text-sm underline">退出</button>
                             </div>
                         ) : (

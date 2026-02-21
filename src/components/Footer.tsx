@@ -30,7 +30,7 @@ const Footer = () => {
                         <h3 className="font-bold text-slate-900 mb-4">服务项目</h3>
                         <ul className="space-y-3">
                             <li><Link href="#services" className="text-slate-600 hover:text-secondary">升学规划</Link></li>
-                            <li><Link href="#services" className="text-slate-600 hover:text-secondary">签证申请</Link></li>
+                            <li><Link href="/tools/emgs" className="text-slate-600 hover:text-secondary">签证进度查询</Link></li>
                             <li><Link href="#services" className="text-slate-600 hover:text-secondary">语言培训</Link></li>
                             <li><Link href="/#services" className="text-slate-600 hover:text-secondary">境外服务</Link></li>
                             <li><Link href="/assessment" className="text-secondary font-bold hover:text-primary">免费留学评估</Link></li>
