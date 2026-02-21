@@ -71,6 +71,7 @@ export default function SocialMap({ className }: { className?: string }) {
                     name: post.author?.name || 'Aladdin Scholar',
                     university: post.author?.university || '',
                     status: 'online',
+                    authorId: post.author?.id,
                     avatar: post.author?.avatarUrl || '',
                     title: post.title,
                     description: post.description,
@@ -361,9 +362,21 @@ export default function SocialMap({ className }: { className?: string }) {
                                 </div>
 
                                 {/* Action Button */}
-                                <button className="w-full mt-4 py-2 bg-white/5 hover:bg-brand-primary text-white text-sm font-medium rounded-lg transition-colors border border-white/10 focus:outline-none focus:ring-2 focus:ring-brand-primary">
-                                    打个招呼 👋
-                                </button>
+                                {selectedItem.authorId === user?.id ? (
+                                    <button
+                                        onClick={() => {
+                                            setSelectedItem(null);
+                                            setIsEditProfileModalOpen(true);
+                                        }}
+                                        className="w-full mt-4 py-2 bg-brand-primary/20 hover:bg-brand-primary text-brand-primary hover:text-white text-sm font-medium rounded-lg transition-colors border border-brand-primary/30 focus:outline-none focus:ring-2 focus:ring-brand-primary flex items-center justify-center gap-2"
+                                    >
+                                        <span>✏️</span> 编辑个人资料
+                                    </button>
+                                ) : (
+                                    <button className="w-full mt-4 py-2 bg-white/5 hover:bg-brand-primary text-white text-sm font-medium rounded-lg transition-colors border border-white/10 focus:outline-none focus:ring-2 focus:ring-brand-primary">
+                                        打个招呼 👋
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </Popup>

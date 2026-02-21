@@ -9,6 +9,7 @@ export async function GET() {
             include: {
                 author: {
                     select: {
+                        id: true,
                         name: true,
                         avatarUrl: true,
                         university: true,
@@ -77,6 +78,7 @@ export async function POST(req: NextRequest) {
             include: {
                 author: {
                     select: {
+                        id: true,
                         name: true,
                         avatarUrl: true,
                         university: true

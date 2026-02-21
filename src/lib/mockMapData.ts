@@ -9,6 +9,7 @@ export interface MapItem {
     title: string;          // Name of student (from DB) or Apartment Name (from Modal)
     subtitle?: string;      // University or location name
     avatarUrl?: string;     // Student avatar
+    authorId?: string;      // ID of the user who created it
 
     // Status properties
     status?: 'online' | 'studying' | 'chilling' | 'offline'; // For 'student' type
