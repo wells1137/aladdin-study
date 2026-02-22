@@ -11,6 +11,9 @@ export interface MapItem {
     avatarUrl?: string;     // Student avatar
     authorId?: string;      // ID of the user who created it
 
+    name?: string;
+    university?: string;
+
     // Status properties
     status?: 'online' | 'studying' | 'chilling' | 'offline'; // For 'student' type
 }

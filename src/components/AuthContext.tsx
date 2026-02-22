@@ -30,6 +30,7 @@ const AuthContext = createContext<AuthState>({
     login: async () => ({ success: false }),
     register: async () => ({ success: false }),
     logout: () => { },
+    updateProfile: () => { },
 });
 
 export const useAuth = () => useContext(AuthContext);

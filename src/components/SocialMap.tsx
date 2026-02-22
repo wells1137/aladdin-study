@@ -4,19 +4,19 @@ import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react'
 import Map, { Marker, NavigationControl, FullscreenControl, GeolocateControl, Popup, Layer, MapRef } from 'react-map-gl/maplibre';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { MapPin, Users, Compass, Navigation, Plus, LogOut, CheckCircle2, X } from 'lucide-react';
+import { MapPin, Users, User, Compass, Navigation, Plus, LogOut, CheckCircle2, X } from 'lucide-react';
 import { mockMapData, MapItem, MapItemType } from '@/lib/mockMapData';
 import { useAuth } from './AuthContext';
 import StudentAuthModal from './StudentAuthModal';
 import StudentPinModal from './StudentPinModal';
-import EditProfileModal from './EditProfileModal';
+import ProfileModal, { ProfileMode } from './ProfileModal';
 import Image from 'next/image';
 
 export default function SocialMap({ className }: { className?: string }) {
     const { isStudent, user, logout } = useAuth();
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
+    const [profileModalState, setProfileModalState] = useState<{ isOpen: boolean; mode: ProfileMode; profile: MapItem | null }>({ isOpen: false, mode: 'view', profile: null });
     const [livePosts, setLivePosts] = useState<MapItem[]>([]);
 
     const [selectedItem, setSelectedItem] = useState<MapItem | null>(null);
@@ -362,21 +362,15 @@ export default function SocialMap({ className }: { className?: string }) {
                                 </div>
 
                                 {/* Action Button */}
-                                {selectedItem.authorId === user?.id ? (
-                                    <button
-                                        onClick={() => {
-                                            setSelectedItem(null);
-                                            setIsEditProfileModalOpen(true);
-                                        }}
-                                        className="w-full mt-4 py-2 bg-brand-primary/20 hover:bg-brand-primary text-brand-primary hover:text-white text-sm font-medium rounded-lg transition-colors border border-brand-primary/30 focus:outline-none focus:ring-2 focus:ring-brand-primary flex items-center justify-center gap-2"
-                                    >
-                                        <span>✏️</span> 编辑个人资料
-                                    </button>
-                                ) : (
-                                    <button className="w-full mt-4 py-2 bg-white/5 hover:bg-brand-primary text-white text-sm font-medium rounded-lg transition-colors border border-white/10 focus:outline-none focus:ring-2 focus:ring-brand-primary">
-                                        打个招呼 👋
-                                    </button>
-                                )}
+                                <button
+                                    onClick={() => {
+                                        setProfileModalState({ isOpen: true, mode: 'view', profile: selectedItem });
+                                        setSelectedItem(null);
+                                    }}
+                                    className="w-full mt-4 py-2 bg-white/5 hover:bg-brand-primary text-white text-sm font-bold rounded-xl transition-colors border border-white/10 flex items-center justify-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                >
+                                    <User className="w-4 h-4" /> 查看个人主页
+                                </button>
                             </div>
                         </div>
                     </Popup>
@@ -452,9 +446,13 @@ export default function SocialMap({ className }: { className?: string }) {
                                     </div>
                                 </div>
                                 <button
-                                    onClick={() => setIsEditProfileModalOpen(true)}
+                                    onClick={() => setProfileModalState({
+                                        isOpen: true,
+                                        mode: 'view',
+                                        profile: { id: 'self', type: 'student', coordinates: [0, 0], title: user.name || '', subtitle: user.university || '', avatarUrl: user.avatarUrl || '', authorId: user.id }
+                                    })}
                                     className="p-1.5 rounded-lg bg-white/5 hover:bg-brand-primary text-slate-400 hover:text-white transition-colors"
-                                    title="编辑资料"
+                                    title="查看个人主页"
                                 >
                                     <span className="text-xs">✏️</span>
                                 </button>
@@ -530,10 +528,13 @@ export default function SocialMap({ className }: { className?: string }) {
                     fetchPosts();
                 }}
             />
-            {/* Edit Profile Modal */}
-            <EditProfileModal
-                isOpen={isEditProfileModalOpen}
-                onClose={() => setIsEditProfileModalOpen(false)}
+            {/* Profile Modal (View & Edit States) */}
+            <ProfileModal
+                isOpen={profileModalState.isOpen}
+                onClose={() => setProfileModalState(prev => ({ ...prev, isOpen: false }))}
+                mode={profileModalState.mode}
+                setMode={(mode) => setProfileModalState(prev => ({ ...prev, mode }))}
+                profileData={profileModalState.profile}
             />
         </div>
     );
