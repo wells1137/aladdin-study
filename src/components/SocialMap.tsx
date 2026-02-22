@@ -158,7 +158,7 @@ export default function SocialMap({ className }: { className?: string }) {
 
             {/* Category Filters Overlay - Simplified */}
             {!isPinningMode && (
-                <div className="absolute top-6 right-4 z-20 flex flex-wrap justify-end gap-2 px-4 pointer-events-auto">
+                <div className="absolute top-[100px] right-4 z-20 flex flex-col sm:flex-row justify-end gap-2 pointer-events-auto">
                     {(['all', 'student'] as const).map((type) => (
                         <button
                             key={type}
