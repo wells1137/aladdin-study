@@ -156,22 +156,7 @@ export default function SocialMap({ className }: { className?: string }) {
             onMouseLeave={() => setIsIdle(true)}
             onTouchStart={() => setIsIdle(false)}>
 
-            {/* Category Filters Overlay - Simplified */}
-            {!isPinningMode && (
-                <div className="absolute top-[100px] right-4 z-20 flex flex-col sm:flex-row justify-end gap-2 pointer-events-auto">
-                    {(['all', 'student'] as const).map((type) => (
-                        <button
-                            key={type}
-                            onClick={() => setFilterType(type)}
-                            className={`px-6 py-2 rounded-full text-sm font-bold transition-all backdrop-blur-md border border-white/10 shadow-lg capitalize flex items-center gap-2
-                            ${filterType === type ? 'bg-white text-slate-900' : 'bg-slate-900/60 text-white hover:bg-slate-800'}`}
-                        >
-                            {type === 'all' && '全部校友'}
-                            {type === 'student' && <><Users className="w-4 h-4" /> 校友目录</>}
-                        </button>
-                    ))}
-                </div>
-            )}
+
 
             {/* Pinning Mode Instructions Overlay */}
             {isPinningMode && (
@@ -427,6 +412,21 @@ export default function SocialMap({ className }: { className?: string }) {
                                 <Users className="w-3.5 h-3.5" />
                                 附近 {allData.length} 人
                             </div>
+                        </div>
+
+                        {/* Category Tabs */}
+                        <div className="flex gap-2 mb-4 p-1 bg-black/20 border border-white/5 rounded-xl">
+                            {(['all', 'student'] as const).map((type) => (
+                                <button
+                                    key={type}
+                                    onClick={() => setFilterType(type)}
+                                    className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2
+                                    ${filterType === type ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                                >
+                                    {type === 'all' && '🌍 全部校友'}
+                                    {type === 'student' && <><Users className="w-4 h-4" /> 校友目录</>}
+                                </button>
+                            ))}
                         </div>
 
                         <p className="text-white/60 text-sm mb-6 leading-relaxed">
