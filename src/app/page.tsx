@@ -7,9 +7,6 @@ import VideoGallery from '@/components/VideoGallery';
 import Contact from '@/components/Contact';
 import Partners from '@/components/Partners';
 import { OrganizationJsonLd, WebSiteJsonLd, FAQJsonLd } from '@/components/JsonLd';
-import SpringBanner from '@/components/SpringBanner';
-import FestiveParticles from '@/components/animations/FestiveParticles';
-import FounderLetter from '@/components/FounderLetter';
 import About from '@/components/About';
 import BusinessScope from '@/components/BusinessScope';
 import SocialMap from '@/components/SocialMap';
@@ -43,8 +40,7 @@ export default function Home() {
       <OrganizationJsonLd />
       <WebSiteJsonLd />
       <FAQJsonLd faqs={faqs} />
-      <SpringBanner />
-      <FestiveParticles />
+
       <Hero />
 
       {/* 3D Social Map Section */}
@@ -56,7 +52,6 @@ export default function Home() {
         <SocialMap className="w-full h-full border-none" />
       </section>
 
-      <FounderLetter />
       <Services />
       <BusinessScope />
       <HandbookShowcase />

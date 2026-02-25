@@ -19,12 +19,6 @@ const Hero = () => {
             {/* Tech Grid Overlay */}
             <div className="absolute inset-0 z-0 tech-grid opacity-30"></div>
 
-            {/* Top Marquee */}
-            <div className="w-full spring-banner-gradient border-y-4 border-yellow-600 transform -rotate-1 z-20 mb-6 overflow-hidden">
-                <Marquee className="py-2 text-yellow-100 font-black uppercase tracking-widest text-base">
-                    <span>🐴 马年大吉 • 恭贺新春 • 2026马来西亚留学 • QS百强名校 • 万事如意 • 工薪首选 • 🏮</span>
-                </Marquee>
-            </div>
 
             <div className="max-w-7xl mx-auto relative z-10 px-4 sm:px-6 lg:px-8 flex-grow flex flex-col justify-center">
                 <div className="lg:grid lg:grid-cols-12 lg:gap-4">
@@ -45,21 +39,7 @@ const Hero = () => {
                                 </span>
                             </h1>
 
-                            {/* 🎆 Spring Festival Greeting Card */}
-                            <div className="relative inline-block mb-6 spring-hero-glow rounded-lg overflow-hidden">
-                                <div className="bg-gradient-to-r from-red-700 via-red-600 to-red-700 border-2 border-yellow-500 rounded-lg px-6 py-3">
-                                    <div className="flex items-center gap-2 sm:gap-3">
-                                        <span className="text-2xl sm:text-3xl animate-lantern-swing origin-top">🏮</span>
-                                        <div className="text-center">
-                                            <p className="text-yellow-300 text-base sm:text-lg font-black tracking-widest whitespace-nowrap">🐴 马年大吉 · 恭贺新春 🐴</p>
-                                            <p className="text-yellow-100/80 text-[10px] sm:text-xs mt-0.5 sm:mt-1">阿拉仃教育祝大家新春快乐，学业有成！</p>
-                                        </div>
-                                        <span className="text-2xl sm:text-3xl animate-lantern-swing origin-top" style={{ animationDelay: '0.5s' }}>🏮</span>
-                                    </div>
-                                    {/* Sparkle border at bottom */}
-                                    <div className="absolute bottom-0 left-0 right-0 h-[2px] spring-sparkle-line" />
-                                </div>
-                            </div>
+
                         </FadeIn>
 
                         <FadeIn delay={0.3}>
