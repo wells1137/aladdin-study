@@ -42,19 +42,27 @@ export async function POST(req: NextRequest) {
         }
 
         // Find or create Counselor for tracker; first partner can be promoted to admin via DB
-        const counselor = await prisma.counselor.upsert({
-            where: { email: username },
-            create: { email: username, name: username, isAdmin: false },
-            update: {},
-        });
-        const role = counselor.isAdmin ? 'admin' : 'partner';
-        const token = await signToken(username, role, counselor.id);
+        let counselorId: number | undefined;
+        let isAdmin = false;
+        try {
+            const counselor = await prisma.counselor.upsert({
+                where: { email: username },
+                create: { email: username, name: username, isAdmin: false },
+                update: {},
+            });
+            counselorId = counselor.id;
+            isAdmin = counselor.isAdmin;
+        } catch {
+            // Counselor table may not exist yet (migration not applied); continue without it
+        }
+        const role = isAdmin ? 'admin' : 'partner';
+        const token = await signToken(username, role, counselorId);
         return NextResponse.json({
             token,
             username,
-            counselorId: counselor.id,
-            isAdmin: counselor.isAdmin,
-            user: { id: counselor.id, name: counselor.name, role, counselorId: counselor.id }
+            counselorId,
+            isAdmin,
+            user: { id: counselorId ?? 'partner', name: username, role, counselorId }
         });
 
     } catch (error) {
@@ -91,19 +99,23 @@ export async function GET(req: NextRequest) {
     // Partner/counselor: attach counselorId for tracker (by id or by username lookup)
     let counselorId = payload.counselorId ?? null;
     if (payload.role === 'partner' || payload.role === 'admin') {
-        const counselor = counselorId
-            ? await prisma.counselor.findUnique({ where: { id: counselorId } })
-            : await prisma.counselor.findUnique({ where: { email: payload.username } });
-        if (counselor) {
-            counselorId = counselor.id;
-            return NextResponse.json({
-                authenticated: true,
-                username: payload.username,
-                role: counselor.isAdmin ? 'admin' : 'partner',
-                counselorId,
-                isAdmin: counselor.isAdmin,
-                user: { id: counselor.id, name: counselor.name, role: counselor.isAdmin ? 'admin' : 'partner', counselorId }
-            });
+        try {
+            const counselor = counselorId
+                ? await prisma.counselor.findUnique({ where: { id: counselorId } })
+                : await prisma.counselor.findUnique({ where: { email: payload.username } });
+            if (counselor) {
+                counselorId = counselor.id;
+                return NextResponse.json({
+                    authenticated: true,
+                    username: payload.username,
+                    role: counselor.isAdmin ? 'admin' : 'partner',
+                    counselorId,
+                    isAdmin: counselor.isAdmin,
+                    user: { id: counselor.id, name: counselor.name, role: counselor.isAdmin ? 'admin' : 'partner', counselorId }
+                });
+            }
+        } catch {
+            // Counselor table may not exist yet
         }
     }
     return NextResponse.json({
