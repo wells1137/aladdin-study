@@ -3,9 +3,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { useAuth } from '@/components/AuthContext';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const { isTrackerUser } = useAuth();
 
     const navLinks = [
         { name: '留学指南', href: '/guides' },
@@ -44,6 +46,14 @@ const Navbar = () => {
                                 {link.name}
                             </Link>
                         ))}
+                        {isTrackerUser && (
+                            <Link
+                                href="/tracker"
+                                className="text-slate-600 hover:text-primary font-medium transition-colors"
+                            >
+                                工作台
+                            </Link>
+                        )}
                         <Link
                             href="/assessment"
                             className="bg-primary text-white px-5 py-2 rounded-full font-medium hover:bg-slate-800 transition-colors shadow-sm hover:shadow-md"
@@ -78,6 +88,15 @@ const Navbar = () => {
                                 {link.name}
                             </Link>
                         ))}
+                        {isTrackerUser && (
+                            <Link
+                                href="/tracker"
+                                className="block px-4 py-3 rounded-md text-base font-medium text-slate-600 hover:text-primary hover:bg-slate-50"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                工作台
+                            </Link>
+                        )}
                         <div className="pt-4 pb-2">
                             <Link
                                 href="/assessment"

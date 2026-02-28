@@ -36,16 +36,25 @@ export async function POST(req: NextRequest) {
             });
         }
 
-        // 2. Fallback to B-End Partner Login (hardcoded env)
+        // 2. Fallback to B-End Partner Login (hardcoded env) → 顾问/管理员（材料跟踪系统）
         if (!validateCredentials(username, password)) {
             return NextResponse.json({ error: '账号或密码错误 (未找到匹配记录)' }, { status: 401 });
         }
 
-        const token = await signToken(username, 'partner');
+        // Find or create Counselor for tracker; first partner can be promoted to admin via DB
+        const counselor = await prisma.counselor.upsert({
+            where: { email: username },
+            create: { email: username, name: username, isAdmin: false },
+            update: {},
+        });
+        const role = counselor.isAdmin ? 'admin' : 'partner';
+        const token = await signToken(username, role, counselor.id);
         return NextResponse.json({
             token,
             username,
-            user: { name: 'Partner User', role: 'partner' }
+            counselorId: counselor.id,
+            isAdmin: counselor.isAdmin,
+            user: { id: counselor.id, name: counselor.name, role, counselorId: counselor.id }
         });
 
     } catch (error) {
@@ -79,6 +88,24 @@ export async function GET(req: NextRequest) {
         }
     }
 
+    // Partner/counselor: attach counselorId for tracker (by id or by username lookup)
+    let counselorId = payload.counselorId ?? null;
+    if (payload.role === 'partner' || payload.role === 'admin') {
+        const counselor = counselorId
+            ? await prisma.counselor.findUnique({ where: { id: counselorId } })
+            : await prisma.counselor.findUnique({ where: { email: payload.username } });
+        if (counselor) {
+            counselorId = counselor.id;
+            return NextResponse.json({
+                authenticated: true,
+                username: payload.username,
+                role: counselor.isAdmin ? 'admin' : 'partner',
+                counselorId,
+                isAdmin: counselor.isAdmin,
+                user: { id: counselor.id, name: counselor.name, role: counselor.isAdmin ? 'admin' : 'partner', counselorId }
+            });
+        }
+    }
     return NextResponse.json({
         authenticated: true,
         username: payload.username,

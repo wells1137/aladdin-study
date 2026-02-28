@@ -50,3 +50,128 @@ model Post {
   authorId    String
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
+
+// ========== 留学申请材料跟踪系统 (aladdin-tracker) ==========
+model Counselor {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique  // 登录账号 (partner username)
+  name      String
+  isAdmin   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  students       Student[]
+  applications   Application[]
+  notifications  Notification[]
+}
+
+model University {
+  id          Int      @id @default(autoincrement())
+  name        String   // 院校中文名称
+  nameEn      String?
+  type        String   // public | private
+  country     String   @default("马来西亚")
+  description String?
+  logoUrl     String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  materialTemplates MaterialTemplate[]
+  applications     Application[]
+}
+
+model MaterialTemplate {
+  id               Int      @id @default(autoincrement())
+  universityId     Int
+  name             String   // 材料名称
+  nameEn           String?
+  description      String?
+  category         String   // academic | identity | financial | language | other
+  isRequired       Boolean  @default(true)
+  acceptedFormats  String?  @default("pdf,jpg,png,doc,docx")
+  sortOrder        Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  university University         @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  uploads           UploadedMaterial[]
+}
+
+model Student {
+  id           Int      @id @default(autoincrement())
+  counselorId  Int
+  name         String
+  email        String?
+  phone        String?
+  passportNo   String?
+  nationality  String?
+  notes        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  counselor    Counselor     @relation(fields: [counselorId], references: [id], onDelete: Cascade)
+  applications Application[]
+}
+
+model Application {
+  id           Int      @id @default(autoincrement())
+  studentId    Int
+  universityId Int
+  counselorId  Int
+  status       String   @default("draft") // draft | uploading | under_review | revision_needed | approved | rejected
+  adminNotes   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  student    Student     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  university University  @relation(fields: [universityId], references: [id])
+  counselor  Counselor   @relation(fields: [counselorId], references: [id], onDelete: Cascade)
+  materials  UploadedMaterial[]
+  notifications Notification[]
+  feishuLogs FeishuSyncLog[]
+}
+
+model UploadedMaterial {
+  id             Int      @id @default(autoincrement())
+  applicationId  Int
+  templateId     Int
+  fileKey        String   // S3/storage key
+  fileUrl        String
+  fileName       String
+  fileSize       Int?
+  mimeType       String?
+  reviewStatus   String   @default("pending") // pending | approved | rejected | reupload_needed
+  reviewComment  String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  application Application      @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  template    MaterialTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id             Int      @id @default(autoincrement())
+  userId         Int      // 接收者 = counselorId
+  applicationId  Int?
+  title          String
+  content        String?
+  type           String?  // material_approved | material_rejected | review_complete | status_change | system
+  isRead         Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  counselor   Counselor    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+}
+
+model FeishuSyncLog {
+  id             Int      @id @default(autoincrement())
+  applicationId  Int
+  syncType       String   // create | update | status_change
+  status         String   // success | failed | pending
+  requestPayload String?  // JSON
+  responseData   String?  // JSON
+  createdAt      DateTime @default(now())
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+}

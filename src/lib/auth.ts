@@ -34,18 +34,26 @@ export function validateCredentials(username: string, password: string): boolean
     return accounts.get(username) === password;
 }
 
-export async function signToken(username: string, role: string = 'partner'): Promise<string> {
-    return new SignJWT({ username, role })
+export interface TokenPayload {
+    username: string;
+    role: string;
+    counselorId?: number;
+}
+
+export async function signToken(username: string, role: string = 'partner', counselorId?: number): Promise<string> {
+    const payload: TokenPayload = { username, role };
+    if (counselorId !== undefined) payload.counselorId = counselorId;
+    return new SignJWT(payload as object)
         .setProtectedHeader({ alg: 'HS256' })
         .setExpirationTime('7d')
         .setIssuedAt()
         .sign(JWT_SECRET);
 }
 
-export async function verifyToken(token: string): Promise<{ username: string; role: string } | null> {
+export async function verifyToken(token: string): Promise<TokenPayload | null> {
     try {
         const { payload } = await jwtVerify(token, JWT_SECRET);
-        return payload as { username: string; role: string };
+        return payload as TokenPayload;
     } catch {
         return null;
     }

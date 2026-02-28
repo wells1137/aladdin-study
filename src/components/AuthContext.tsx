@@ -9,11 +9,17 @@ export interface User {
     avatarUrl?: string | null;
     university?: string | null;
     role: string;
+    /** 材料跟踪系统：顾问 ID（partner 登录后有值） */
+    counselorId?: number;
+    /** 材料跟踪系统：是否为管理员 */
+    isAdmin?: boolean;
 }
 
 interface AuthState {
     isPartner: boolean;
     isStudent: boolean;
+    /** 是否为材料跟踪系统顾问（含管理员） */
+    isTrackerUser: boolean;
     user: User | null;
     loading: boolean;
     login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
@@ -25,6 +31,7 @@ interface AuthState {
 const AuthContext = createContext<AuthState>({
     isPartner: false,
     isStudent: false,
+    isTrackerUser: false,
     user: null,
     loading: true,
     login: async () => ({ success: false }),
@@ -51,9 +58,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 .then(res => res.json())
                 .then(data => {
                     if (data.authenticated) {
-                        if (data.role === 'partner') {
+                        if (data.role === 'partner' || data.role === 'admin') {
                             setIsPartner(true);
-                            setUser({ id: 'partner', name: data.username, role: 'partner' });
+                            setUser({
+                                id: String(data.user?.id ?? 'partner'),
+                                name: data.user?.name ?? data.username,
+                                role: data.role,
+                                counselorId: data.counselorId,
+                                isAdmin: data.isAdmin,
+                            });
                         } else {
                             setIsStudent(true);
                             setUser(data.user);
@@ -79,9 +92,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const data = await res.json();
             if (res.ok) {
                 localStorage.setItem('auth_token', data.token);
-                if (data.user?.role === 'partner') {
+                if (data.user?.role === 'partner' || data.user?.role === 'admin') {
                     setIsPartner(true);
-                    setUser({ id: 'partner', name: data.username, role: 'partner' });
+                    setUser({
+                        id: String(data.user?.id ?? 'partner'),
+                        name: data.user?.name ?? data.username,
+                        role: data.user?.role ?? 'partner',
+                        counselorId: data.counselorId ?? data.user?.counselorId,
+                        isAdmin: data.isAdmin ?? data.user?.isAdmin,
+                    });
                 } else {
                     setIsStudent(true);
                     setUser(data.user);
@@ -127,8 +146,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    const isTrackerUser = Boolean(isPartner);
+
     return (
-        <AuthContext.Provider value={{ isPartner, isStudent, user, loading, login, register, logout, updateProfile }}>
+        <AuthContext.Provider value={{ isPartner, isStudent, isTrackerUser, user, loading, login, register, logout, updateProfile }}>
             {children}
         </AuthContext.Provider>
     );
