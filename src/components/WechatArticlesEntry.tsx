@@ -1,5 +1,4 @@
-const WX_BIZ = 'MzkyMjM4MTYyMQ==';
-const historyUrl = `https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=${WX_BIZ}&scene=124#wechat_redirect`;
+const historyUrl = 'https://mp.weixin.qq.com/s/4hItuv3ZQ_f-Gyg1PdzBpA';
 
 const WechatArticlesEntry = () => {
     return (
