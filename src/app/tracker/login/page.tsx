@@ -58,8 +58,8 @@ export default function TrackerLoginPage() {
         <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 px-8 py-8 text-center">
-            <div className="relative h-12 w-44 mx-auto mb-4">
-              <Image src="/logo-new.png" alt="阿拉仃教育" fill className="object-contain" />
+            <div className="relative h-12 w-44 mx-auto mb-4 opacity-90">
+              <Image src="/logo-cropped.jpg" alt="阿拉仃教育" fill className="object-contain brightness-0 invert" />
             </div>
             <h1 className="text-xl font-bold text-white">申请材料跟踪系统</h1>
             <p className="text-emerald-100 text-sm mt-1">合作伙伴 / 顾问登录</p>
