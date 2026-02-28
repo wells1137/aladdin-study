@@ -1,5 +1,6 @@
 import GuideContent from '@/components/GuideContent';
 import GuidesShowcase from '@/components/GuidesShowcase';
+import WechatArticlesEntry from '@/components/WechatArticlesEntry';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -40,6 +41,9 @@ export default function GuidesPage() {
             </div>
             <GuidesShowcase hideCta />
             <GuideContent />
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+                <WechatArticlesEntry />
+            </div>
         </main>
     );
 }

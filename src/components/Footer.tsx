@@ -1,9 +1,12 @@
 import Link from 'next/link';
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from 'lucide-react';
+import FooterWechatBanner from './FooterWechatBanner';
 
 const Footer = () => {
     return (
-        <footer className="bg-gradient-to-b from-red-50 to-red-100 border-t-2 border-red-200 pt-16 pb-8">
+        <footer>
+            <FooterWechatBanner />
+            <div className="bg-gradient-to-b from-red-50 to-red-100 border-t-2 border-red-200 pt-16 pb-8">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
                     <div className="col-span-1 md:col-span-1">
@@ -78,6 +81,7 @@ const Footer = () => {
                 <div className="border-t border-slate-200 pt-8 text-center text-slate-500 text-sm">
                     <p>&copy; {new Date().getFullYear()} Aladdin Education Technology. 保留所有权利。</p>
                 </div>
+            </div>
             </div>
         </footer>
     );
