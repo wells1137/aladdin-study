@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { trackerFetch } from '@/lib/trackerClient';
 
@@ -42,7 +42,6 @@ const STATUS_LABEL: Record<string, string> = {
 
 export default function ApplicationDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const id = Number(params.id);
   const [detail, setDetail] = useState<AppDetail | null>(null);
   const [checklist, setChecklist] = useState<Checklist | null>(null);

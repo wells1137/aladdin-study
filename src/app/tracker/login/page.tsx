@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Lock, LogIn, ArrowLeft } from 'lucide-react';
+import { LogIn, ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/components/AuthContext';
 
 export default function TrackerLoginPage() {
