@@ -1,5 +1,6 @@
 import HandbookShowcase from '@/components/HandbookShowcase';
 import GuideContent from '@/components/GuideContent';
+import OfferShowcase from '@/components/OfferShowcase';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -44,6 +45,7 @@ export default function GuidesPage() {
                     </p>
                 </div>
             </div>
+            <OfferShowcase />
             <HandbookShowcase />
             <GuideContent />
         </main>
