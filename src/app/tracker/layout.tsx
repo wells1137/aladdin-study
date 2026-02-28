@@ -36,11 +36,11 @@ export default function TrackerLayout({
 
   useEffect(() => {
     if (loading) return;
-    if (!isPartner) {
-      router.replace('/?login=1');
+    if (!isPartner && pathname !== '/tracker/login') {
+      router.replace('/tracker/login');
       return;
     }
-  }, [loading, isPartner, router]);
+  }, [loading, isPartner, router, pathname]);
 
   if (loading) {
     return (
@@ -49,20 +49,25 @@ export default function TrackerLayout({
       </div>
     );
   }
+  // Login page: render directly without sidebar
+  if (pathname === '/tracker/login') {
+    return <>{children}</>;
+  }
+
   if (!isPartner) {
     return null;
   }
 
   return (
     <div className="min-h-screen bg-slate-50 flex">
-      <aside className="w-56 bg-white border-r border-slate-200 flex flex-col shrink-0">
+      <aside className="w-56 bg-white border-r border-slate-200 flex flex-col shrink-0 fixed top-0 left-0 h-screen z-40">
         <div className="p-4 border-b border-slate-200">
           <Link href="/" className="text-lg font-semibold text-slate-800 hover:text-emerald-600">
             阿拉仃教育
           </Link>
           <p className="text-xs text-slate-500 mt-1">申请材料跟踪系统</p>
         </div>
-        <nav className="p-2 flex-1">
+        <nav className="p-2 flex-1 overflow-auto">
           {TRACKER_NAV.map((item) => (
             <Link
               key={item.href}
@@ -103,15 +108,22 @@ export default function TrackerLayout({
           <Link
             href="/"
             className="mt-2 block text-xs text-slate-500 hover:text-slate-700"
-            onClick={() => {
-              localStorage.removeItem('auth_token');
-            }}
           >
             返回官网
           </Link>
+          <button
+            type="button"
+            onClick={() => {
+              localStorage.removeItem('auth_token');
+              window.location.href = '/tracker/login';
+            }}
+            className="mt-1 block text-xs text-red-500 hover:text-red-700"
+          >
+            退出登录
+          </button>
         </div>
       </aside>
-      <main className="flex-1 overflow-auto p-6">{children}</main>
+      <main className="flex-1 overflow-auto p-6 ml-56">{children}</main>
     </div>
   );
 }

@@ -3,11 +3,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
-import { useAuth } from '@/components/AuthContext';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const { isTrackerUser } = useAuth();
 
     const navLinks = [
         { name: '留学指南', href: '/guides' },
@@ -18,7 +16,8 @@ const Navbar = () => {
         { name: '关于我们', href: '/#about' },
         { name: '合作院校', href: '/#partners' },
         { name: '联系我们', href: '/contact' },
-    ];
+        { name: '申请跟踪', href: '/tracker', highlight: true },
+    ] as const;
 
     return (
         <nav className="fixed w-full z-50 bg-white/95 backdrop-blur-sm border-b-2 border-red-200" aria-label="主导航栏">
@@ -41,19 +40,15 @@ const Navbar = () => {
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                className="text-slate-600 hover:text-primary font-medium transition-colors"
+                                className={
+                                    'highlight' in link && link.highlight
+                                        ? 'text-emerald-600 hover:text-emerald-700 font-semibold transition-colors'
+                                        : 'text-slate-600 hover:text-primary font-medium transition-colors'
+                                }
                             >
                                 {link.name}
                             </Link>
                         ))}
-                        {isTrackerUser && (
-                            <Link
-                                href="/tracker"
-                                className="text-slate-600 hover:text-primary font-medium transition-colors"
-                            >
-                                工作台
-                            </Link>
-                        )}
                         <Link
                             href="/assessment"
                             className="bg-primary text-white px-5 py-2 rounded-full font-medium hover:bg-slate-800 transition-colors shadow-sm hover:shadow-md"
@@ -82,21 +77,16 @@ const Navbar = () => {
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                className="block px-4 py-3 rounded-md text-base font-medium text-slate-600 hover:text-primary hover:bg-slate-50 active:bg-slate-100 transition-colors border-b border-slate-50 last:border-0"
+                                className={
+                                    'highlight' in link && link.highlight
+                                        ? 'block px-4 py-3 rounded-md text-base font-semibold text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 active:bg-emerald-100 transition-colors border-b border-slate-50 last:border-0'
+                                        : 'block px-4 py-3 rounded-md text-base font-medium text-slate-600 hover:text-primary hover:bg-slate-50 active:bg-slate-100 transition-colors border-b border-slate-50 last:border-0'
+                                }
                                 onClick={() => setIsOpen(false)}
                             >
                                 {link.name}
                             </Link>
                         ))}
-                        {isTrackerUser && (
-                            <Link
-                                href="/tracker"
-                                className="block px-4 py-3 rounded-md text-base font-medium text-slate-600 hover:text-primary hover:bg-slate-50"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                工作台
-                            </Link>
-                        )}
                         <div className="pt-4 pb-2">
                             <Link
                                 href="/assessment"

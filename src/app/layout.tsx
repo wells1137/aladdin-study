@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { AuthProvider } from '@/components/AuthContext';
+import ConditionalShell from '@/components/ConditionalShell';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -81,11 +80,9 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} font-sans antialiased text-slate-900 bg-white`}>
         <AuthProvider>
-          <Navbar />
-          <main id="main-content" className="min-h-screen pt-20">
+          <ConditionalShell>
             {children}
-          </main>
-          <Footer />
+          </ConditionalShell>
         </AuthProvider>
       </body>
     </html>
