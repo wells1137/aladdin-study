@@ -23,7 +23,7 @@ const categoryEmojis: Record<string, string> = {
 // Filter out old dates just in case, or sort by date desc
 const sortedGuides = [...guides].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-export default function GuidesShowcase() {
+export default function GuidesShowcase({ hideCta = false }: { hideCta?: boolean } = {}) {
     const [activeCategory, setActiveCategory] = useState('全部');
 
     const filteredGuides = activeCategory === '全部'
@@ -148,17 +148,18 @@ export default function GuidesShowcase() {
                     </div>
                 )}
 
-                {/* CTA */}
-                <div className="text-center mt-8">
-                    <Link
-                        href="/guides"
-                        className="inline-flex items-center gap-2 bg-white text-slate-700 border border-slate-200 px-6 py-3 rounded-full font-semibold hover:bg-slate-50 hover:text-primary hover:border-primary/30 transition-all shadow-sm hover:shadow-md"
-                    >
-                        <BookOpen className="w-4 h-4" />
-                        查看全部 {guides.length} 篇指南
-                        <ChevronRight className="w-4 h-4" />
-                    </Link>
-                </div>
+                {!hideCta && (
+                    <div className="text-center mt-8">
+                        <Link
+                            href="/guides"
+                            className="inline-flex items-center gap-2 bg-white text-slate-700 border border-slate-200 px-6 py-3 rounded-full font-semibold hover:bg-slate-50 hover:text-primary hover:border-primary/30 transition-all shadow-sm hover:shadow-md"
+                        >
+                            <BookOpen className="w-4 h-4" />
+                            查看全部 {guides.length} 篇指南
+                            <ChevronRight className="w-4 h-4" />
+                        </Link>
+                    </div>
+                )}
             </div>
         </section>
     );

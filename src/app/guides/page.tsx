@@ -1,4 +1,5 @@
 import GuideContent from '@/components/GuideContent';
+import GuidesShowcase from '@/components/GuidesShowcase';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -37,6 +38,7 @@ export default function GuidesPage() {
                     </p>
                 </div>
             </div>
+            <GuidesShowcase hideCta />
             <GuideContent />
         </main>
     );
