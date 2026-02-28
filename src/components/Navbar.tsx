@@ -118,8 +118,8 @@ const Navbar = () => {
                 <div className="flex justify-between h-20 items-center">
                     <div className="flex-shrink-0 flex items-center gap-2">
                         <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
-                            <div className="relative h-16 w-56">
-                                <Image src="/logo-cropped.jpg" alt="阿拉仃教育 Logo" fill className="object-contain" priority />
+                            <div className="relative h-12 w-48">
+                                <Image src="/logo-new.png" alt="阿拉仃教育 Logo" fill className="object-contain rounded-md" priority />
                             </div>
                         </Link>
                     </div>
