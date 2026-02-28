@@ -283,12 +283,9 @@ const OfferShowcase = () => {
                                                 </div>
                                             </div>
 
-                                            <div className="relative w-full aspect-[3/4] bg-gray-100 border-2 border-black overflow-hidden group-hover:grayscale-0 grayscale transition-all scanline mt-3">
-                                                <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 p-4 text-center">
-                                                    <FileCheck size={24} className="mb-2 opacity-50 text-black" />
-                                                    <span className="text-[10px] font-black uppercase text-black">官方录取信</span>
-                                                </div>
-                                                <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                            <div className="mt-3 pt-2 border-t-2 border-dashed border-gray-200 flex items-center justify-center gap-1.5 text-gray-400 group-hover:text-primary transition-colors">
+                                                <FileCheck size={14} />
+                                                <span className="text-[10px] font-bold uppercase">已获官方录取信</span>
                                             </div>
                                         </div>
 
