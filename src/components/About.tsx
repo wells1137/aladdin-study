@@ -26,9 +26,9 @@ const About = () => {
                     {/* Story Block - Spans 7 cols */}
                     <div className="lg:col-span-7">
                         <FadeIn direction="right">
-                            <div className="relative h-full">
-                                <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-2xl blur opacity-20 bg-gradient-animated" style={{ backgroundImage: 'linear-gradient(135deg, #C41E3A, #FFD700, #C41E3A)' }}></div>
-                                <div className="relative bg-white p-8 md:p-10 rounded-2xl shadow-sm border border-slate-100 h-full">
+                            <a href="https://mp.weixin.qq.com/s/4hItuv3ZQ_f-Gyg1PdzBpA" target="_blank" rel="noopener noreferrer" className="block relative h-full group/story cursor-pointer">
+                                <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-2xl blur opacity-20 group-hover/story:opacity-40 transition-opacity bg-gradient-animated" style={{ backgroundImage: 'linear-gradient(135deg, #C41E3A, #FFD700, #C41E3A)' }}></div>
+                                <div className="relative bg-white p-8 md:p-10 rounded-2xl shadow-sm border border-slate-100 h-full group-hover/story:shadow-lg group-hover/story:-translate-y-1 transition-all duration-300">
                                     <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center">
                                         <span className="w-2 h-8 bg-primary rounded-full mr-3 animate-pulse-glow"></span>
                                         我们的故事
@@ -67,8 +67,11 @@ const About = () => {
                                             <span className="text-sm text-slate-500">行业深耕</span>
                                         </div>
                                     </div>
+                                    <div className="mt-4 text-sm text-primary font-semibold flex items-center gap-1 opacity-0 group-hover/story:opacity-100 transition-opacity">
+                                        点击了解更多 →
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </FadeIn>
                     </div>
 
