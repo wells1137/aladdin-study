@@ -13,7 +13,8 @@ const navItems: NavItem[] = [
         name: '留学指南',
         children: [
             { name: '2026 名校录取捷报', href: '/guides/offers' },
-            { name: '留学资料下载', href: '/guides' },
+            { name: '留学指南', href: '/guides' },
+            { name: '留学资料下载', href: '/guides/downloads' },
         ],
     },
     { name: '签证进度', href: '/tools/emgs' },
