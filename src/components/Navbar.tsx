@@ -12,10 +12,7 @@ const Navbar = () => {
         { name: '签证进度', href: '/tools/emgs' },
         { name: '3D 社交地图', href: '/community' },
         { name: '服务项目', href: '/#services' },
-        { name: '多元业务', href: '/#business' },
         { name: '关于我们', href: '/#about' },
-        { name: '合作院校', href: '/#partners' },
-        { name: '联系我们', href: '/contact' },
         { name: '申请跟踪', href: '/tracker', highlight: true },
     ] as const;
 
