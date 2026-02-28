@@ -118,8 +118,9 @@ const Navbar = () => {
                 <div className="flex justify-between h-20 items-center">
                     <div className="flex-shrink-0 flex items-center gap-2">
                         <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
-                            <div className="relative h-12 w-48" style={{ isolation: 'isolate' }}>
-                                <Image src="/logo-new.png" alt="阿拉仃教育 Logo" fill className="object-contain" style={{ mixBlendMode: 'screen' }} priority />
+                            <div className="relative h-12 w-48 bg-white">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src="/logo-new.png" alt="阿拉仃教育 Logo" className="h-full w-full object-contain" style={{ mixBlendMode: 'screen' }} />
                             </div>
                         </Link>
                     </div>
