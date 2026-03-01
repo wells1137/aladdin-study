@@ -50,6 +50,21 @@ const handbooks = [
         date: '2026 UTM',
         partnerOnly: true,
     },
+    {
+        title: '马来亚大学 (UM) 授课型硕士 MAS',
+        description: 'QS排名60+，马来亚大学 Master of Advanced Studies 授课型硕士项目介绍。',
+        file: '',
+        date: '即将上线',
+        partnerOnly: true,
+        comingSoon: true,
+    },
+    {
+        title: '理科大学 (USM) 设计硕士（创意产业）',
+        description: 'USM 设计硕士（创意产业方向）详细招生简章与课程介绍。',
+        file: 'USM - 设计硕士(创意产业).pdf',
+        date: '2026 USM',
+        partnerOnly: true,
+    },
 ];
 
 const HandbookShowcase = () => {
@@ -57,6 +72,7 @@ const HandbookShowcase = () => {
     const [showLogin, setShowLogin] = useState(false);
 
     const handleDownload = (book: typeof handbooks[0]) => {
+        if ('comingSoon' in book && book.comingSoon) return;
         if (book.partnerOnly && !isPartner) {
             setShowLogin(true);
         } else {
@@ -119,10 +135,11 @@ const HandbookShowcase = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {handbooks.map((book, index) => {
                             const isLocked = book.partnerOnly && !isPartner;
+                            const isComingSoon = 'comingSoon' in book && book.comingSoon;
                             return (
-                                <FadeIn key={book.file} delay={index * 0.1}>
-                                    <div className={`group relative bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_#000] hover:shadow-[12px_12px_0px_0px_#CCFF00] hover:-translate-y-2 transition-all duration-200 ${isLocked ? 'opacity-90' : ''}`}>
-                                        <div className="absolute -top-6 -right-6 bg-secondary border-4 border-black text-black font-black text-xs px-3 py-1 transform rotate-12 group-hover:rotate-0 transition-transform">
+                                <FadeIn key={book.title} delay={index * 0.1}>
+                                    <div className={`group relative bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_#000] hover:shadow-[12px_12px_0px_0px_#CCFF00] hover:-translate-y-2 transition-all duration-200 ${isLocked || isComingSoon ? 'opacity-90' : ''}`}>
+                                        <div className={`absolute -top-6 -right-6 ${isComingSoon ? 'bg-orange-400' : 'bg-secondary'} border-4 border-black text-black font-black text-xs px-3 py-1 transform rotate-12 group-hover:rotate-0 transition-transform`}>
                                             {book.date}
                                         </div>
 
@@ -146,13 +163,18 @@ const HandbookShowcase = () => {
 
                                         <button
                                             onClick={() => handleDownload(book)}
-                                            className={`block w-full text-center py-4 font-bold uppercase tracking-wider transition-colors border-2 border-transparent hover:border-black ${isLocked
-                                                ? 'bg-gray-300 text-gray-600 hover:bg-gray-400 cursor-pointer'
-                                                : 'bg-black text-white hover:bg-primary hover:text-white'
+                                            disabled={isComingSoon}
+                                            className={`block w-full text-center py-4 font-bold uppercase tracking-wider transition-colors border-2 border-transparent hover:border-black ${isComingSoon
+                                                ? 'bg-orange-100 text-orange-500 cursor-not-allowed'
+                                                : isLocked
+                                                    ? 'bg-gray-300 text-gray-600 hover:bg-gray-400 cursor-pointer'
+                                                    : 'bg-black text-white hover:bg-primary hover:text-white'
                                                 }`}
                                         >
                                             <span className="flex items-center justify-center gap-2">
-                                                {isLocked ? (
+                                                {isComingSoon ? (
+                                                    <>⏳ 等待上传</>
+                                                ) : isLocked ? (
                                                     <><Lock className="w-4 h-4" /> 登录后下载</>
                                                 ) : (
                                                     <><Download className="w-4 h-4" /> 下载 PDF</>
