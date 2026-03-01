@@ -61,18 +61,23 @@ const Footer = () => {
                         <ul className="space-y-3">
                             <li className="flex items-start gap-3 text-slate-600">
                                 <MapPin className="h-5 w-5 text-secondary shrink-0 mt-0.5" />
-                                <div>
-                                    <span className="block font-bold text-slate-700">CN：中国总部 (合肥/济南/南昌)</span>
-                                    <span className="block text-sm mt-1">MY：马来西亚总部 (吉隆坡)</span>
+                                <div className="text-sm leading-relaxed">
+                                    <span className="block font-bold text-slate-700">安徽阿拉仃：合肥包河区绿地中心</span>
+                                    <span className="block">山东阿拉仃：济南（山东女子学院）</span>
+                                    <span className="block">办事处：南昌（江西华夏学院）/ 成都名人科技</span>
+                                    <span className="block mt-1 font-bold text-slate-700">MY：马来西亚总部（吉隆坡）</span>
+                                </div>
+                            </li>
+                            <li className="flex items-start gap-3 text-slate-600">
+                                <Phone className="h-5 w-5 text-secondary shrink-0 mt-0.5" />
+                                <div className="text-sm">
+                                    <span className="block">+86 18153480528 / +86 18119962609</span>
+                                    <span className="block mt-0.5">WhatsApp: +60 162609624</span>
                                 </div>
                             </li>
                             <li className="flex items-center gap-3 text-slate-600">
-                                <Phone className="h-5 w-5 text-secondary shrink-0" />
-                                <span>18153480528 / 18119962609</span>
-                            </li>
-                            <li className="flex items-center gap-3 text-slate-600">
                                 <Mail className="h-5 w-5 text-secondary shrink-0" />
-                                <span>Aladddin.edu@outlook.com</span>
+                                <span className="text-sm">Aladddin.edu@outlook.com</span>
                             </li>
                         </ul>
                     </div>

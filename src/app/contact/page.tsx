@@ -30,33 +30,31 @@ export default function ContactPage() {
                                 <MapPin className="text-primary w-5 h-5" /> 全球办公网络
                             </h3>
                             <div className="space-y-6 text-slate-600 text-sm">
-                                {/* China HQ */}
                                 <div className="pl-7 relative">
                                     <span className="absolute left-0 top-1.5 w-2.5 h-2.5 bg-red-600 rounded-full ring-4 ring-red-100"></span>
-                                    <p className="font-bold text-slate-900 text-base">中国 · 合肥 (中国总部)</p>
+                                    <p className="font-bold text-slate-900 text-base">安徽阿拉仃（中国总部）</p>
                                     <p className="text-slate-500 text-xs mb-1">CHINA HEADQUARTERS</p>
-                                    <p>安徽省合肥市政务文化新区 / 蜀山区</p>
-                                </div>
-
-                                {/* Regional Offices */}
-                                <div className="pl-7 relative">
-                                    <span className="absolute left-0 top-1.5 w-2.5 h-2.5 bg-slate-400 rounded-full"></span>
-                                    <p className="font-bold text-slate-900 text-base">中国 · 济南 (华北区办事处)</p>
-                                    <p className="text-slate-500 text-xs mb-1">NORTH CHINA OFFICE</p>
-                                    <p>山东省济南市高新区 / 历下区CBD</p>
+                                    <p>合肥包河区绿地中心</p>
                                 </div>
 
                                 <div className="pl-7 relative">
                                     <span className="absolute left-0 top-1.5 w-2.5 h-2.5 bg-slate-400 rounded-full"></span>
-                                    <p className="font-bold text-slate-900 text-base">中国 · 南昌 (华中区办事处)</p>
-                                    <p className="text-slate-500 text-xs mb-1">CENTRAL CHINA OFFICE</p>
-                                    <p>江西省南昌市红谷滩新区</p>
+                                    <p className="font-bold text-slate-900 text-base">山东阿拉仃</p>
+                                    <p className="text-slate-500 text-xs mb-1">SHANDONG OFFICE</p>
+                                    <p>济南（山东女子学院）</p>
                                 </div>
 
-                                {/* Overseas HQ */}
+                                <div className="pl-7 relative">
+                                    <span className="absolute left-0 top-1.5 w-2.5 h-2.5 bg-slate-400 rounded-full"></span>
+                                    <p className="font-bold text-slate-900 text-base">办事处</p>
+                                    <p className="text-slate-500 text-xs mb-1">REGIONAL OFFICES</p>
+                                    <p>南昌（江西华夏学院）</p>
+                                    <p>成都名人科技</p>
+                                </div>
+
                                 <div className="pl-7 relative border-t border-slate-100 pt-4 mt-2">
                                     <span className="absolute left-0 top-6 w-2.5 h-2.5 bg-blue-500 rounded-full"></span>
-                                    <p className="font-bold text-slate-900 text-base">马来西亚 · 吉隆坡 (马来西亚总部)</p>
+                                    <p className="font-bold text-slate-900 text-base">马来西亚 · 吉隆坡（马来西亚总部）</p>
                                     <p className="text-slate-500 text-xs mb-1">MALAYSIA HEADQUARTERS</p>
                                     <p>Kuala Lumpur City Centre (KLCC)</p>
                                 </div>
@@ -69,13 +67,23 @@ export default function ContactPage() {
                                 <Phone className="text-primary w-5 h-5" /> 直接联系
                             </h3>
                             <div className="space-y-4">
-                                <a href="tel:18153480528" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
+                                <a href="tel:+8618153480528" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
                                     <div className="bg-green-100 p-2 rounded-full text-green-600">
                                         <Phone className="w-4 h-4" />
                                     </div>
                                     <div>
-                                        <p className="text-xs text-slate-500">24小时热线</p>
-                                        <p className="font-bold text-slate-900">181-5348-0528</p>
+                                        <p className="text-xs text-slate-500">中国热线</p>
+                                        <p className="font-bold text-slate-900">+86 181-5348-0528</p>
+                                        <p className="text-sm text-slate-600">+86 181-1996-2609</p>
+                                    </div>
+                                </a>
+                                <a href="https://wa.me/60162609624" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
+                                    <div className="bg-green-100 p-2 rounded-full text-green-600">
+                                        <MessageCircle className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-slate-500">马来西亚 WhatsApp</p>
+                                        <p className="font-bold text-slate-900">+60 162609624</p>
                                     </div>
                                 </a>
                                 <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
