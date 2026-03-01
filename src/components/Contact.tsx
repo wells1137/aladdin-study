@@ -44,11 +44,15 @@ const Contact = () => {
                                         <div className="space-y-1.5 mt-1">
                                             <p className="text-slate-600 flex items-center gap-2">
                                                 <span className="w-2 h-2 bg-red-600 rounded-full ring-2 ring-red-50"></span>
-                                                <span className="font-bold text-slate-800">中国总部：</span> 合肥政务文化新区
+                                                <span className="font-bold text-slate-800">安徽阿拉仃：</span> 合肥包河区绿地中心
                                             </p>
                                             <p className="text-slate-600 flex items-center gap-2 pl-0.5">
                                                 <span className="w-1.5 h-1.5 bg-slate-400 rounded-full"></span>
-                                                <span className="font-medium text-slate-700">办事处：</span> 济南 CBD / 南昌红谷滩
+                                                <span className="font-medium text-slate-700">山东阿拉仃：</span> 济南（山东女子学院）
+                                            </p>
+                                            <p className="text-slate-600 flex items-center gap-2 pl-0.5">
+                                                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full"></span>
+                                                <span className="font-medium text-slate-700">办事处：</span> 南昌（江西华夏学院）/ 成都名人科技
                                             </p>
                                             <p className="text-slate-600 flex items-center gap-2 pt-2 mt-2 border-t border-slate-100">
                                                 <span className="w-2 h-2 bg-blue-600 rounded-full ring-2 ring-blue-50"></span>
@@ -63,9 +67,11 @@ const Contact = () => {
                                         <Phone className="h-6 w-6 text-primary shrink-0" />
                                     </div>
                                     <div>
-                                        <p className="font-bold text-slate-900">电话 / WhatsApp</p>
-                                        <p className="text-slate-600 font-mono">18153480528</p>
-                                        <p className="text-slate-600 font-mono">18119962609</p>
+                                        <p className="font-bold text-slate-900">电话</p>
+                                        <p className="text-slate-600 font-mono">+86 18153480528</p>
+                                        <p className="text-slate-600 font-mono">+86 18119962609</p>
+                                        <p className="font-bold text-slate-900 mt-2">WhatsApp</p>
+                                        <p className="text-slate-600 font-mono">+60 162609624</p>
                                     </div>
                                 </div>
 
