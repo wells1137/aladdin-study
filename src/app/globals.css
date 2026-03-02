@@ -3,20 +3,25 @@
 @theme {
   --font-sans: var(--font-inter);
 
-  /* 🏮 Spring Festival Red (中国红) */
-  --color-primary: #C41E3A;
+  /* Premium Midnight Blue (深空蓝) */
+  --color-primary: #1E3A8A;
+  /* text-blue-900 */
   --color-primary-foreground: #FFFFFF;
 
-  /* 🏮 Fortune Gold (金色) */
-  --color-secondary: #FFD700;
-  --color-secondary-foreground: #000000;
+  /* Electric Blue Accent (电光蓝) */
+  --color-secondary: #3B82F6;
+  /* text-blue-500 */
+  --color-secondary-foreground: #FFFFFF;
 
-  /* Neutral / Surface */
-  --color-muted: #FFF8F0;
-  --color-muted-foreground: #1F2937;
+  /* Surface / Glass Base */
+  --color-muted: #F8FAFC;
+  /* text-slate-50 */
+  --color-muted-foreground: #64748B;
+  /* text-slate-500 */
 
-  /* Dark Surface - deep red */
-  --color-accent: #1A0A0A;
+  /* Dark Surface - deep navy */
+  --color-accent: #0F172A;
+  /* text-slate-900 */
   --color-accent-foreground: #FFFFFF;
 }
 
@@ -56,17 +61,34 @@
     text-shadow: 0 0 10px rgba(204, 255, 0, 0.5);
   }
 
-  .brutalist-shadow {
-    box-shadow: 8px 8px 0px 0px #000000;
+  /* ============================
+     GLASSMORPHISM & PREMIUM UI
+     ============================ */
+
+  .glass-card {
+    @apply bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl;
   }
 
-  .brutalist-shadow-sm {
-    box-shadow: 4px 4px 0px 0px #000000;
+  .glass-panel {
+    @apply bg-slate-900/40 backdrop-blur-2xl border border-white/10;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
 
-  .brutalist-border {
-    border: 3px solid #000000;
+  .bg-gradient-premium {
+    background: linear-gradient(135deg, #020617 0%, #0F172A 50%, #1E3A8A 100%);
   }
+
+  /* Soft premium glow */
+  .premium-glow {
+    box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.4);
+  }
+
+  /* Legacy brutalist classes (kept empty to prevent breakage while migrating) */
+  .brutalist-shadow {}
+
+  .brutalist-shadow-sm {}
+
+  .brutalist-border {}
 
   /* ============================
      TECH-FEEL ANIMATIONS
