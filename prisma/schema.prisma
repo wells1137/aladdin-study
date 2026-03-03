@@ -29,6 +29,10 @@ model User {
   passwordHash String
   name         String
   university   String?
+  major        String?
+  enrollmentYear Int?
+  bio          String?
+  wechatId     String?
   avatarUrl    String?
   role         String    @default("student") // student, admin
   createdAt    DateTime  @default(now())

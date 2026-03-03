@@ -8,6 +8,10 @@ export interface User {
     name: string;
     avatarUrl?: string | null;
     university?: string | null;
+    major?: string | null;
+    enrollmentYear?: number | null;
+    bio?: string | null;
+    wechatId?: string | null;
     role: string;
     /** 材料跟踪系统：顾问 ID（partner 登录后有值） */
     counselorId?: number;
