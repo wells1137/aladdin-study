@@ -58,6 +58,13 @@ const handbooks = [
         partnerOnly: true,
     },
     {
+        title: '浙财×UKM 数据科学硕士（中外合作办学）',
+        description: 'QS126 马来西亚国立大学，1.5年学制，18万学费，中留服认证，免联考申请制。',
+        file: 'images/ukm-data-science-poster.png',
+        date: '2025 UKM',
+        partnerOnly: false,
+    },
+    {
         title: '理科大学 (USM) 设计硕士（创意产业）',
         description: 'USM 设计硕士（创意产业方向）详细招生简章与课程介绍。',
         file: 'USM - 设计硕士(创意产业).pdf',
