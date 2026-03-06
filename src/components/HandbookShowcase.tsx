@@ -51,12 +51,11 @@ const handbooks = [
         partnerOnly: true,
     },
     {
-        title: '马来亚大学 (UM) 授课型硕士 MAS',
+        title: '马来亚大学 (UM) 高级研究硕士 MAS',
         description: 'QS排名60+，马来亚大学 Master of Advanced Studies 授课型硕士项目介绍。',
-        file: '',
-        date: '即将上线',
+        file: 'UM高级研究硕士（MAS）中文.pdf',
+        date: '2026 UM',
         partnerOnly: true,
-        comingSoon: true,
     },
     {
         title: '理科大学 (USM) 设计硕士（创意产业）',
