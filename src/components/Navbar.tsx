@@ -24,6 +24,7 @@ const navItems: NavItem[] = [
         children: [
             { name: '专业服务', href: '/#services' },
             { name: '多元业务', href: '/#business' },
+            { name: '浙财×UKM 数据科学硕士', href: '/programs/ukm-data-science' },
         ],
     },
     {
