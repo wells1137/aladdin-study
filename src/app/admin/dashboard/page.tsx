@@ -1,139 +1,158 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { Users, FileText, MessageSquare, FolderOpen, TrendingUp } from 'lucide-react';
 
-type Lead = {
-    id: number;
-    type: string;
-    name: string;
-    contact: string;
-    status: string;
-    data: string;
-    createdAt: string;
+type Stats = {
+    users: { total: number; newWeek: number };
+    posts: { total: number; newWeek: number };
+    leads: { total: number; newWeek: number };
+    applications: { total: number; byStatus: Record<string, number> };
+    recentUsers: { id: string; name: string; email: string; university: string | null; createdAt: string }[];
+    recentLeads: { id: number; name: string; contact: string; type: string; status: string; createdAt: string }[];
+};
+
+function StatCard({
+    icon: Icon,
+    label,
+    total,
+    newWeek,
+    color,
+}: {
+    icon: React.ElementType;
+    label: string;
+    total: number;
+    newWeek: number;
+    color: string;
+}) {
+    return (
+        <div className="bg-slate-900/60 backdrop-blur border border-white/10 rounded-2xl p-5 hover:border-white/20 transition">
+            <div className="flex items-center gap-3 mb-3">
+                <div className={`p-2 rounded-xl ${color}`}>
+                    <Icon size={18} className="text-white" />
+                </div>
+                <span className="text-sm text-slate-400">{label}</span>
+            </div>
+            <p className="text-3xl font-bold text-white">{total}</p>
+            {newWeek > 0 && (
+                <div className="flex items-center gap-1 mt-2 text-emerald-400 text-xs">
+                    <TrendingUp size={12} />
+                    <span>本周 +{newWeek}</span>
+                </div>
+            )}
+        </div>
+    );
+}
+
+const STATUS_COLORS: Record<string, string> = {
+    new: 'bg-yellow-500/20 text-yellow-400',
+    contacted: 'bg-blue-500/20 text-blue-400',
+    closed: 'bg-slate-500/20 text-slate-400',
 };
 
 export default function AdminDashboard() {
-    const [leads, setLeads] = useState<Lead[]>([]);
+    const [stats, setStats] = useState<Stats | null>(null);
     const [loading, setLoading] = useState(true);
-    const router = useRouter();
 
     useEffect(() => {
-        const token = localStorage.getItem('adminToken');
-        if (!token) {
-            router.push('/admin');
-            return;
-        }
-
-        fetch('/api/leads', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+        const token = localStorage.getItem('auth_token');
+        if (!token) return;
+        fetch('/api/admin/stats', {
+            headers: { Authorization: `Bearer ${token}` },
         })
-            .then((res) => {
-                if (res.status === 401) {
-                    localStorage.removeItem('adminToken');
-                    router.push('/admin');
-                    throw new Error('Unauthorized');
-                }
-                return res.json();
-            })
-            .then((data) => {
-                setLeads(data);
-                setLoading(false);
-            })
-            .catch((err) => console.error(err));
-    }, [router]);
+            .then((r) => r.json())
+            .then(setStats)
+            .catch(console.error)
+            .finally(() => setLoading(false));
+    }, []);
 
-    const toggleStatus = async (id: number, currentStatus: string) => {
-        const newStatus = currentStatus === 'new' ? 'contacted' : 'new';
-        const token = localStorage.getItem('adminToken');
+    if (loading) {
+        return (
+            <div className="flex items-center gap-3 text-slate-400 py-20 justify-center">
+                <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                加载中…
+            </div>
+        );
+    }
 
-        // Optimistic update
-        setLeads(leads.map(l => l.id === id ? { ...l, status: newStatus } : l));
-
-        await fetch('/api/leads', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({ id, status: newStatus })
-        });
-    };
-
-    if (loading) return <div className="p-8 text-center">Loading...</div>;
+    if (!stats) return <p className="text-red-400">加载失败</p>;
 
     return (
-        <div className="min-h-screen bg-slate-50 p-8">
-            <div className="max-w-6xl mx-auto">
-                <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-3xl font-bold text-slate-800">Leads Dashboard</h1>
-                    <button
-                        onClick={() => {
-                            localStorage.removeItem('adminToken');
-                            router.push('/admin');
-                        }}
-                        className="text-red-600 hover:text-red-800 text-sm font-medium"
-                    >
-                        Logout
-                    </button>
+        <div className="space-y-8">
+            <h1 className="text-2xl font-bold text-white">数据概览</h1>
+
+            {/* Stat Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <StatCard icon={Users} label="注册用户" total={stats.users.total} newWeek={stats.users.newWeek} color="bg-blue-600/30" />
+                <StatCard icon={FileText} label="社区帖子" total={stats.posts.total} newWeek={stats.posts.newWeek} color="bg-purple-600/30" />
+                <StatCard icon={MessageSquare} label="咨询线索" total={stats.leads.total} newWeek={stats.leads.newWeek} color="bg-amber-600/30" />
+                <StatCard icon={FolderOpen} label="申请总数" total={stats.applications.total} newWeek={0} color="bg-emerald-600/30" />
+            </div>
+
+            {/* App status breakdown */}
+            {Object.keys(stats.applications.byStatus).length > 0 && (
+                <div className="bg-slate-900/60 backdrop-blur border border-white/10 rounded-2xl p-5">
+                    <h2 className="text-sm font-semibold text-slate-300 mb-3">申请状态分布</h2>
+                    <div className="flex flex-wrap gap-3">
+                        {Object.entries(stats.applications.byStatus).map(([st, cnt]) => (
+                            <div key={st} className="bg-white/5 rounded-xl px-4 py-2 text-center min-w-[80px]">
+                                <p className="text-lg font-bold text-white">{cnt}</p>
+                                <p className="text-xs text-slate-400">{st}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Recent Users */}
+                <div className="bg-slate-900/60 backdrop-blur border border-white/10 rounded-2xl overflow-hidden">
+                    <div className="px-5 py-4 border-b border-white/10">
+                        <h2 className="font-semibold text-white">最近注册</h2>
+                    </div>
+                    <div className="divide-y divide-white/5">
+                        {stats.recentUsers.map((u) => (
+                            <div key={u.id} className="px-5 py-3 flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm text-white font-medium">{u.name}</p>
+                                    <p className="text-xs text-slate-500">{u.email}</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-xs text-slate-400">{u.university || '-'}</p>
+                                    <p className="text-xs text-slate-600">{new Date(u.createdAt).toLocaleDateString('zh-CN')}</p>
+                                </div>
+                            </div>
+                        ))}
+                        {stats.recentUsers.length === 0 && (
+                            <p className="px-5 py-6 text-sm text-slate-500 text-center">暂无用户</p>
+                        )}
+                    </div>
                 </div>
 
-                <div className="bg-white rounded-xl shadow overflow-hidden">
-                    <table className="min-w-full divide-y divide-slate-200">
-                        <thead className="bg-slate-50">
-                            <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">ID</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Name</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Contact</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Type</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Date</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Details</th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-slate-200">
-                            {leads.map((lead) => (
-                                <tr key={lead.id} className="hover:bg-slate-50 transition-colors">
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">#{lead.id}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{lead.name}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{lead.contact}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${lead.type === 'assessment' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
-                                            }`}>
-                                            {lead.type}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                                        {new Date(lead.createdAt).toLocaleDateString()}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                        <button
-                                            onClick={() => toggleStatus(lead.id, lead.status)}
-                                            className={`px-2 py-1 rounded text-xs font-bold border ${lead.status === 'contacted'
-                                                    ? 'bg-green-50 text-green-700 border-green-200'
-                                                    : 'bg-red-50 text-red-700 border-red-200'
-                                                }`}
-                                        >
-                                            {lead.status.toUpperCase()}
-                                        </button>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                                        <button
-                                            onClick={() => alert(JSON.stringify(JSON.parse(lead.data), null, 2))}
-                                            className="text-indigo-600 hover:text-indigo-900"
-                                        >
-                                            View JSON
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    {leads.length === 0 && (
-                        <div className="p-8 text-center text-slate-500">No leads found.</div>
-                    )}
+                {/* Recent Leads */}
+                <div className="bg-slate-900/60 backdrop-blur border border-white/10 rounded-2xl overflow-hidden">
+                    <div className="px-5 py-4 border-b border-white/10">
+                        <h2 className="font-semibold text-white">最近线索</h2>
+                    </div>
+                    <div className="divide-y divide-white/5">
+                        {stats.recentLeads.map((l) => (
+                            <div key={l.id} className="px-5 py-3 flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm text-white font-medium">{l.name}</p>
+                                    <p className="text-xs text-slate-500">{l.contact}</p>
+                                </div>
+                                <div className="text-right">
+                                    <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${STATUS_COLORS[l.status] || 'bg-slate-500/20 text-slate-400'}`}>
+                                        {l.status}
+                                    </span>
+                                    <p className="text-xs text-slate-600 mt-1">{new Date(l.createdAt).toLocaleDateString('zh-CN')}</p>
+                                </div>
+                            </div>
+                        ))}
+                        {stats.recentLeads.length === 0 && (
+                            <p className="px-5 py-6 text-sm text-slate-500 text-center">暂无线索</p>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

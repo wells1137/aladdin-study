@@ -1,4 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { verifyToken } from '@/lib/auth';
 
 const NOTIFY_EMAIL = 'Aladddin.edu@outlook.com';
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
@@ -97,6 +99,45 @@ async function sendEmail(formData: Record<string, string>): Promise<boolean> {
     }
 }
 
+async function isAdminRequest(req: NextRequest): Promise<boolean> {
+    const token = req.headers.get('authorization')?.replace('Bearer ', '');
+    if (!token) return false;
+    const payload = await verifyToken(token);
+    return payload?.role === 'partner' || payload?.role === 'admin';
+}
+
+// GET: List leads (admin only)
+export async function GET(req: NextRequest) {
+    if (!(await isAdminRequest(req))) {
+        return NextResponse.json({ error: '未授权' }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(req.url);
+    const status = searchParams.get('status') || '';
+    const page = Math.max(1, Number(searchParams.get('page')) || 1);
+    const pageSize = 20;
+
+    const where = status ? { status } : {};
+
+    const [leads, total] = await Promise.all([
+        prisma.lead.findMany({
+            where,
+            orderBy: { createdAt: 'desc' },
+            skip: (page - 1) * pageSize,
+            take: pageSize,
+        }),
+        prisma.lead.count({ where }),
+    ]);
+
+    return NextResponse.json({
+        leads,
+        total,
+        page,
+        totalPages: Math.ceil(total / pageSize),
+    });
+}
+
+// POST: Create a lead (public)
 export async function POST(request: Request) {
     try {
         const body = await request.json();
@@ -109,10 +150,21 @@ export async function POST(request: Request) {
         const formData = typeof data === 'string' ? JSON.parse(data) : data;
         const emailSent = await sendEmail({ ...formData, name, contact });
 
+        // Save to DB
+        const lead = await prisma.lead.create({
+            data: {
+                type,
+                name,
+                contact,
+                data: typeof data === 'string' ? data : JSON.stringify(data),
+                status: 'new',
+            },
+        });
+
         console.log('[Lead] Submission received:', { type, name, contact, emailSent });
 
         return NextResponse.json({
-            id: Date.now(),
+            id: lead.id,
             type,
             name,
             contact,
@@ -123,4 +175,27 @@ export async function POST(request: Request) {
         console.error('Lead creation error:', error);
         return NextResponse.json({ error: 'Failed to create lead' }, { status: 500 });
     }
+}
+
+// PATCH: Update lead status/note (admin only)
+export async function PATCH(req: NextRequest) {
+    if (!(await isAdminRequest(req))) {
+        return NextResponse.json({ error: '未授权' }, { status: 401 });
+    }
+
+    const { id, status, note } = await req.json();
+    if (!id) {
+        return NextResponse.json({ error: '缺少 id' }, { status: 400 });
+    }
+
+    const data: Record<string, string> = {};
+    if (status) data.status = status;
+    if (note !== undefined) data.note = note;
+
+    const updated = await prisma.lead.update({
+        where: { id: Number(id) },
+        data,
+    });
+
+    return NextResponse.json(updated);
 }
